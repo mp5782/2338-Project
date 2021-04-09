@@ -1,0 +1,6 @@
+library(tidyverse)
+setwd("A:/Dropbox/01 NYU/01 CLASSES/00 2021 SPRING/GPH-GU 2338 (ML)/PROJECT")
+SumStats <- read_csv("Summary_stats_all_locs.csv")
+Hospitalization <- read_csv("Worse_hospitalization_all_locs.csv")
+Mask <- read_csv("Best_mask_hospitalization_all_locs.csv")
+india <- 
