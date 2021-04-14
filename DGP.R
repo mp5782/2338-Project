@@ -81,3 +81,50 @@ worse.state <- reference %>% filter(location_name == "Assam" |
                                     location_name == "Tripura" |
                                     location_name == "Uttar Pradesh" |
                                     location_name == "West Bengal")
+
+#ISOLATING ACTUAL OBSERVATIONS
+
+#national observations
+ref.nat.obs <- ref.national %>% 
+  filter(mobility_data_type == "observed") %>%
+  select(c(location_name,
+           location_id,
+           date,
+           V1,
+           mobility_composite, 
+           confirmed_infections,
+           confirmed_infections_p100k_rate))
+
+#state observations
+ref.stat.obs <- ref.state %>%
+  filter(mobility_data_type == "observed") %>%
+  select(c(location_name,
+           location_id,
+           date,
+           V1,
+           mobility_composite,
+           confirmed_infections_p100k_rate))
+
+#observations from other sets  <----- TO DO: MAKE SURE THESE MATCH, THEY OUGHT
+
+#national observations
+bad.nat.obs <- worse.national %>% 
+  filter(mobility_data_type == "observed") %>%
+  select(c(location_name,
+           location_id,
+           date,
+           V1,
+           mobility_composite, 
+           confirmed_infections,
+           confirmed_infections_p100k_rate))
+
+#state observations
+bad.stat.obs <- worse.state %>%
+  filter(mobility_data_type == "observed") %>%
+  select(c(location_name,
+           location_id,
+           date,
+           V1,
+           mobility_composite,
+           confirmed_infections,
+           confirmed_infections_p100k_rate))
