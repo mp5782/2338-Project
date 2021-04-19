@@ -130,6 +130,8 @@ deaths.date <- read_csv(
   rename(location_name = `Country/Region`)
 ref.national$confirmed_deaths[[1]] <- deaths.date$Deaths[[1]]
 
+## NB: variable `Country/Region` becomes Country_Region at 03-22-2020.csv
+
 
 
 
