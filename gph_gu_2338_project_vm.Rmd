@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(lme4)
 library(lattice)
-data_1 <- read.csv("../data/aggregate/agg_sep_indi_3_4_mobility.csv")
+data_1 <- read.csv("../data/agg_sep_indi_3_4_mobility.csv")
 data_2 <- subset(data_1,state!='India')
 lmer_mobility <- lmer(Mobility ~ days + Phase_indi_.1.0 + Phase_indi_0.0 + Phase_indi_1.0+Phase_indi_2.0+Phase_indi_3.0 +Phase_indi_4.0 + Phase_indi_5.0 + (1| state), data = data_2)
 summary(lmer_mobility)
