@@ -1,0 +1,50 @@
+library(lme4)
+library(lattice)
+data_1 <- read.csv("../data/aggregate/agg_sep_indi_3_4_mobility.csv")
+data_2 <- subset(data_1,state!='India')
+lmer_mobility <- lmer(Mobility ~ days + Phase_indi_.1.0 + Phase_indi_0.0 + Phase_indi_1.0+Phase_indi_2.0+Phase_indi_3.0 +Phase_indi_4.0 + Phase_indi_5.0 + (1| state), data = data_2)
+summary(lmer_mobility)
+data <- NULL
+data$Mobility <- data_1$Mobility
+data$state <- as.factor(data_1$state)
+data$days <- data_1$days
+data <- data.frame(data)
+states = unique(data$state)
+
+
+for (s in states){
+  d <- subset(data_1,state%in%c(s))
+  plot( d$days, d$Mobility,
+        bty="n", pch=19, col="gray",
+        xlab = "Time (days)", 
+        ylab = "Mobility",main=s)
+  abline( v=14, col="firebrick", lty=2 )
+  text( 14, 40000, "Phase 1 lockdown", col="firebrick", cex=0.7, pos=4 )
+  
+  abline( v=32, col="firebrick", lty=2 )
+  text( 32, 45000, "Phase 2 lockdown", col="firebrick", cex=0.7, pos=4 )
+  
+  
+  abline( v=51, col="firebrick", lty=2 )
+  text( 51, 50000, "Phase 3 lockdown", col="firebrick", cex=0.7, pos=4 )
+  
+  abline( v=65, col="firebrick", lty=2 )
+  text( 65, 55000, "Phase 4 lockdown", col="firebrick", cex=0.7, pos=4 )
+  
+  abline( v=79, col='firebrick', lty=2)
+  text( 79, 60000, "Unlock 1", col="firebrick", cex=0.7, pos=4 )
+  
+  abline( v=109, col='firebrick', lty=2)
+  text( 109, 60000, "Unlock 2", col="firebrick", cex=0.7, pos=4 )
+  
+  abline( v=140, col='firebrick', lty=2)
+  
+  ts_mobility <- lm(Mobility ~days + Phase_indi_.1.0 + Phase_indi_0.0 + Phase_indi_1.0+Phase_indi_2.0+Phase_indi_3.0 +Phase_indi_4.0 + Phase_indi_5.0 , data=d)
+  #ts_b <- lm(Death_Rate ~b1_b(days, bp) + b2_b(days, bp) + b3_b(days, bp) +b4_b(days, bp) + b5_b(days, bp)+ b6(days,bp)+ b7(days,bp), data=d)
+  #ts_a <- lm(Death_Rate ~b1_a(days, bp) + b2_a(days, bp) + b3_a(days, bp) +b4_a(days, bp) + b5_a(days, bp)+ b6(days,bp)+ b7(days,bp), data=d)
+  
+  #lines( d$days, ts_b$fitted.values, col="blue",alpha=0.5, lwd=2 )
+  #lines( d$days, ts_a$fitted.values, col="green",alpha=0.5, lwd=2 )
+  #polygon(c(d$days,rev(d$days)),c(ts_b$fitted.values,rev(ts_a$fitted.values)), col=rgb(1, 0, 0,0.2))
+  lines( d$days, ts_mobility$fitted.values, col="red", lwd=2 )
+}
