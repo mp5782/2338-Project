@@ -87,3 +87,5 @@ ts_national <- lm(Mobility ~days +
                     Phase_indi_4.0 +
                     Phase_indi_5.0,
                   data = data_3)
+plot(data_3$days, data_3$Mobility)
+lines(data_3$days, ts_national$fitted.values, col="red", lwd=2)
