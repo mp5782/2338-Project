@@ -1,0 +1,172 @@
+---
+title: "Interrrupted Time series subnational level"
+author: "Vishwali"
+date: "3/6/2021"
+output:
+  pdf_document: default
+  html_document: default
+  keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(lme4)
+library(lattice)
+library(fastDummies)
+library(tidyverse)
+
+
+
+```
+
+```{r}
+data_1 <- read.csv("./data/aggregate_case_05_04.csv")
+data_1 <- unique(data_1)
+data_1 <- dummy_cols(data_1, select_columns = c('phase_indi', 'phase_indi_before','phase_indi_after'))
+data_1 <- rename(data_1,c('nointer_indi'='phase_indi_-1'))
+data_1 <- rename(data_1,c('nointer_indi_before'='phase_indi_before_-1'))
+data_1 <- rename(data_1,c('nointer_indi_after'='phase_indi_after_-1'))
+
+
+
+data_2 <- subset(data_1,state!='India')
+
+
+lmer_rt<- lmer(confirmed_infections~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
+                           + days1 + days2 + days3 +days4 + days5 + days6 + (1| state), data = data_2)
+summary(lmer_rt)
+data <- NULL
+data$case_growth <- data_1$confirmed_infections
+data$state <- as.factor(data_1$state)
+data$days <- data_1$days
+data <- data.frame(data)
+states = unique(data$state)
+
+
+for (s in states){
+d <- subset(data_1,state%in%c(s))
+d[is.na(d)] <- 0
+pdf(paste("./Results/confirmed_infections_",s,".pdf"))
+
+plot( d$days, d$confirmed_infections,
+        bty="n", pch=19, col="gray",
+        xlab = "Date", 
+        ylab = "Confirmed Infections",main=s,xaxt='n'
+      )
+  abline( v=19, col="firebrick", lty=2 )
+  text( 24, 40000, "Phase 1 lockdown", col="firebrick", cex=0.7, pos=4,srt=90 )
+
+  abline( v=40, col="firebrick", lty=2 )
+   text( 42, 45000, "Phase 2 lockdown", col="firebrick", cex=0.7, pos=4,srt=90 )
+
+  abline( v=59, col="firebrick", lty=2 )
+  text( 61, 50000, "Phase 3 lockdown", col="firebrick", cex=0.7, pos=4 ,srt=90)
+
+  abline( v=73, col="firebrick", lty=2 )
+  text( 75, 55000, "Phase 4 lockdown", col="firebrick", cex=0.7, pos=4 ,srt=90)
+
+  abline( v=87, col='firebrick', lty=2)
+  text( 89, 60000, "Unlock 1", col="firebrick", cex=0.7, pos=4 ,srt=90)
+
+  abline( v=117, col='firebrick', lty=2)
+  text( 119, 60000, "Unlock 2", col="firebrick", cex=0.7, pos=4 ,srt=90)
+
+  abline( v=148, col='firebrick', lty=2)
+
+ts <- lm(confirmed_infections ~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
+                           + days1 + days2 + days3 +days4 + days5 + days6 , data=d)
+
+ts_b <- lm(confirmed_infections ~ nointer_indi_before + phase_indi_before_0  + phase_indi_before_1 +phase_indi_before_2 + phase_indi_before_3 +phase_indi_before_4  + phase_indi_before_5  +days_before0  + days_before1 + days_before2 + days_before3  +days_before4 + days_before5 + days_before6 , data=d)
+
+ts_a <- lm(confirmed_infections ~ nointer_indi_after + phase_indi_after_0  + phase_indi_after_1 +phase_indi_after_2 + phase_indi_after_3 +phase_indi_after_4  + phase_indi_after_5  +days_after0  + days_after1 + days_after2 + days_after3  +days_after4 + days_after5 + days_after6 , data=d)
+
+
+#lines( d$days, ts_b$fitted.values, col="blue", lwd=2 )
+#lines( d$days, ts_a$fitted.values, col="green", lwd=2 )
+#polygon(c(d$days,rev(d$days)),c(ts_b$fitted.values,rev(ts_a$fitted.values)), col=rgb(0.5, 0, 0,0.2))
+lines( d$days, ts$fitted.values, col="red", lwd=2 )
+axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
+dev.off()
+}
+```
+
+
+
+
+
+```{r}
+#data_1 <- read.csv("../data/aggregate/final/aggregate_mobility_05_04.csv")
+#data_2 <- subset(data_1,state!='India')
+
+data_1 <- read.csv("./data/aggregate_mobility_05_04.csv")
+data_1 <- unique(data_1)
+data_1 <- dummy_cols(data_1, select_columns = c('phase_indi', 'phase_indi_before','phase_indi_after'))
+data_1 <- rename(data_1,c('nointer_indi'='phase_indi_-1'))
+data_1 <- rename(data_1,c('nointer_indi_before'='phase_indi_before_-1'))
+data_1 <- rename(data_1,c('nointer_indi_after'='phase_indi_after_-1'))
+
+data_2 <- subset(data_1,state!='India')
+
+lmer_mobility <- lmer(Mobility ~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
+                           + days1 + days2 + days3 +days4 + days5 + days6 + (1| state), data = data_2)
+summary(lmer_mobility)
+data <- NULL
+data$case_growth <- data_1$Mobility
+data$state <- as.factor(data_1$state)
+data$days <- data_1$days
+data <- data.frame(data)
+states = unique(data$state)
+
+
+for (s in states){
+d <- subset(data_1,state%in%c(s))
+
+d[is.na(d)] <- 0
+pdf(paste("./Results/mobility_",s,".pdf"))
+plot( d$days, d$Mobility,
+        bty="n", pch=19, col="gray",
+        xlab = "Date", 
+        ylab = "Mobility",main=s,xaxt='n'
+      )
+  abline( v=12, col="firebrick", lty=2 )
+  text( 24, 40000, "Phase 1 lockdown", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=33, col="firebrick", lty=2 )
+    text( 42, 45000, "Phase 2 lockdown", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=52, col="firebrick", lty=2 )
+  text( 61, 50000, "Phase 3 lockdown", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=66, col="firebrick", lty=2 )
+  text( 75, 55000, "Phase 4 lockdown", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=80, col='firebrick', lty=2)
+  text( 89, 60000, "Unlock 1", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=110, col='firebrick', lty=2)
+  text( 119, 60000, "Unlock 2", col="firebrick", cex=0.7, pos=4 )
+
+  abline( v=141, col='firebrick', lty=2)
+
+ts_mobility <- lm(Mobility~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days + days1 + days2 + days3 +days4 + days5 + days6 , data=d)
+
+ts_a <- lm(Mobility ~ nointer_indi_after + phase_indi_after_0  + phase_indi_after_1 +phase_indi_after_2 + phase_indi_after_3 +phase_indi_after_4  + phase_indi_after_5  +days_after0  + days_after1 + days_after2 + days_after3  +days_after4 + days_after5 + days_after6 , data=d)
+
+
+ts_b <- lm(Mobility ~ nointer_indi_before + phase_indi_before_0  + phase_indi_before_1 +phase_indi_before_2 + phase_indi_before_3 +phase_indi_before_4  + phase_indi_before_5  +days_before0  + days_before1 + days_before2 + days_before3  +days_before4 + days_before5 + days_before6 , data=d)
+
+
+
+#lines( d$days, ts_b$fitted.values, col="blue", lwd=2 )
+#lines( d$days, ts_a$fitted.values, col="green", lwd=2 )
+# polygon(c(d$days,rev(d$days)),c(ts_b$fitted.values,rev(ts_a$fitted.values)), col=rgb(1, 0, 0,0.2))
+lines( d$days, ts_mobility$fitted.values, col="red", lwd=2 )
+axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
+dev.off()
+}
+
+
+```
