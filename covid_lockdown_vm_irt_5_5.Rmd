@@ -25,10 +25,9 @@ library(tidyverse)
 ```{r}
 data_1 <- read.csv("./data/aggregate_case_05_04.csv")
 data_1 <- unique(data_1)
-data_1 <- dummy_cols(data_1, select_columns = c('phase_indi', 'phase_indi_before','phase_indi_after'))
+data_1 <- dummy_cols(data_1, select_columns = c('phase_indi'))
 data_1 <- rename(data_1,c('nointer_indi'='phase_indi_-1'))
-data_1 <- rename(data_1,c('nointer_indi_before'='phase_indi_before_-1'))
-data_1 <- rename(data_1,c('nointer_indi_after'='phase_indi_after_-1'))
+
 
 
 
@@ -79,14 +78,7 @@ plot( d$days, d$confirmed_infections,
 ts <- lm(confirmed_infections ~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
                            + days1 + days2 + days3 +days4 + days5 + days6 , data=d)
 
-ts_b <- lm(confirmed_infections ~ nointer_indi_before + phase_indi_before_0  + phase_indi_before_1 +phase_indi_before_2 + phase_indi_before_3 +phase_indi_before_4  + phase_indi_before_5  +days_before0  + days_before1 + days_before2 + days_before3  +days_before4 + days_before5 + days_before6 , data=d)
 
-ts_a <- lm(confirmed_infections ~ nointer_indi_after + phase_indi_after_0  + phase_indi_after_1 +phase_indi_after_2 + phase_indi_after_3 +phase_indi_after_4  + phase_indi_after_5  +days_after0  + days_after1 + days_after2 + days_after3  +days_after4 + days_after5 + days_after6 , data=d)
-
-
-#lines( d$days, ts_b$fitted.values, col="blue", lwd=2 )
-#lines( d$days, ts_a$fitted.values, col="green", lwd=2 )
-#polygon(c(d$days,rev(d$days)),c(ts_b$fitted.values,rev(ts_a$fitted.values)), col=rgb(0.5, 0, 0,0.2))
 lines( d$days, ts$fitted.values, col="red", lwd=2 )
 axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
 dev.off()
@@ -98,15 +90,12 @@ dev.off()
 
 
 ```{r}
-#data_1 <- read.csv("../data/aggregate/final/aggregate_mobility_05_04.csv")
-#data_2 <- subset(data_1,state!='India')
 
 data_1 <- read.csv("./data/aggregate_mobility_05_04.csv")
 data_1 <- unique(data_1)
-data_1 <- dummy_cols(data_1, select_columns = c('phase_indi', 'phase_indi_before','phase_indi_after'))
+data_1 <- dummy_cols(data_1, select_columns = c('phase_indi'))
 data_1 <- rename(data_1,c('nointer_indi'='phase_indi_-1'))
-data_1 <- rename(data_1,c('nointer_indi_before'='phase_indi_before_-1'))
-data_1 <- rename(data_1,c('nointer_indi_after'='phase_indi_after_-1'))
+
 
 data_2 <- subset(data_1,state!='India')
 
@@ -153,16 +142,6 @@ plot( d$days, d$Mobility,
 
 ts_mobility <- lm(Mobility~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days + days1 + days2 + days3 +days4 + days5 + days6 , data=d)
 
-ts_a <- lm(Mobility ~ nointer_indi_after + phase_indi_after_0  + phase_indi_after_1 +phase_indi_after_2 + phase_indi_after_3 +phase_indi_after_4  + phase_indi_after_5  +days_after0  + days_after1 + days_after2 + days_after3  +days_after4 + days_after5 + days_after6 , data=d)
-
-
-ts_b <- lm(Mobility ~ nointer_indi_before + phase_indi_before_0  + phase_indi_before_1 +phase_indi_before_2 + phase_indi_before_3 +phase_indi_before_4  + phase_indi_before_5  +days_before0  + days_before1 + days_before2 + days_before3  +days_before4 + days_before5 + days_before6 , data=d)
-
-
-
-#lines( d$days, ts_b$fitted.values, col="blue", lwd=2 )
-#lines( d$days, ts_a$fitted.values, col="green", lwd=2 )
-# polygon(c(d$days,rev(d$days)),c(ts_b$fitted.values,rev(ts_a$fitted.values)), col=rgb(1, 0, 0,0.2))
 lines( d$days, ts_mobility$fitted.values, col="red", lwd=2 )
 axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
 dev.off()
