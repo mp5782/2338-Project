@@ -124,8 +124,22 @@ data_1 <- rename(data_1,c('nointer_indi'='phase_indi_-1'))
 
 data_2 <- subset(data_1,state!='India')
 
-lmer_mobility <- lmer(Mobility ~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
-                           + days1 + days2 + days3 +days4 + days5 + days6 + (1| state), data = data_2)
+lmer_mobility <- lmer(Mobility ~ nointer_indi
+                                +phase_indi_0 
+                                +phase_indi_1 
+                                +phase_indi_2
+                                +phase_indi_3 
+                                +phase_indi_4 
+                                +phase_indi_5 
+                                +days
+                                +days1 
+                                +days2 
+                                +days3 
+                                +days4 
+                                +days5 
+                                +days6 
+                                +(1| state) 
+                                ,data = data_2)
 summary(lmer_mobility)
 data <- NULL
 data$case_growth <- data_1$Mobility
