@@ -1,0 +1,67 @@
+---
+title: "classifiers"
+author: "Vishwali"
+date: "5/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(MASS)
+```
+```{r}
+df <- read_csv("./data/mobility_class.csv")
+smp_size <- floor(0.75 * nrow(df))
+
+## set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(df)), size = smp_size)
+
+data <- df[train_ind, ]
+test <- df[-train_ind, ]
+```
+
+```{r}
+
+lr = glm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
+                            days3 + days4 + days5 + days6, family = binomial, data = data)
+
+summary(lr)
+```
+
+```{r}
+predicted_probs<-predict(lr,test,type="response")
+predicted<-predicted_probs>0.5
+predicted<-as.numeric(predicted)
+confusion_matrix <- table(test$label_Mobility, predicted, dnn = c("Actual", "Predicted"))
+confusion_matrix
+```
+```{r}
+total<-length(test$label_Mobility) #get the count of all
+accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
+accuracy*100
+```
+
+```{r}
+#LDA model
+lda <-lda(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
+                            days3 + days4 + days5 + days6,data=data)
+summary(lda)
+lda_predicted <- predict(lda,test)
+lda_label =lda_predicted$class
+table(test$label_Mobility,lda_label,dnn = c("Actual", "Predicted"))
+
+```
+
+```{r}
+accuracy_lda_test <- mean(lda_label==test$label_Mobility)
+accuracy_lda_test*100
+```
+
+```{r}
+
+
+```
+
