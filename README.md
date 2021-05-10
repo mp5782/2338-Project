@@ -13,7 +13,7 @@ We use data from 2020-02-08 to2020-08-23, matched to IHME dates.
 
 The R Script `DGP.R` is our Data Generation Process. Note that we can't host the indicated IHME .csv file here so you'll need to download and unpack it from the .zip link above first to reproduce our work. Once you have the IHME .csv file the script's output will match the NationalRef.csv dataset hosted in the `data` folder of this repository.
 
-The R Script `RDA.R` is our Regression Discontinuity Analysis. The data for that *is* hosted on this repository, so it can be downloaded an run without modification.
+The R Script `interrupted_time_series_analysis.R` is our Regression Discontinuity Analysis. The data for that *is* hosted on this repository, so it can be downloaded an run without modification.
 
 The python notebook `prep_data_classifiers.ipynb` is used for generating the labels for the machine learning classifiers.
 
