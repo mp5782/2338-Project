@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(MASS)
 library(tidyverse)
 library(e1071)
+library(tree)
 
 ```
 
@@ -123,6 +124,29 @@ svm_predicted<-as.numeric(svm_predicted)
 confusion_matrix <- table(casetest$label_confirmed_infections, svm_predicted, dnn = c("Actual", "Predicted"))
 confusion_matrix
 
+total<-length(casetest$label_confirmed_infections) #get the count of all
+accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
+accuracy*100
+```
+```{r}
+library(gbm)
+#boosting, mobility
+boost_model <- gbm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
+                            days3 + days4 + days5 + days6,data=casetrain, distribution = "bernoulli", n.trees = 1000)
+predicted_prob_boost <- predict(boost_model, newdata = casetest, n.trees = 1000)
+predicted_label_boost <- ifelse(predicted_prob_boost > 0.5, 1, 0)
+confusion_matrix <- table(casetest$label_Mobility, predicted_label_boost)
+total<-length(casetest$label_Mobility) #get the count of all
+accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
+accuracy*100
+```
+```{r}
+#boosting, infections
+boost_model <- gbm(label_confirmed_infections ~ Mobility + rt + days0 + days1 + days2 +
+                            days3 + days4 + days5 + days6,data=casetrain, distribution = "bernoulli", n.trees = 1000)
+predicted_prob_boost <- predict(boost_model, newdata = casetest, n.trees = 1000)
+predicted_label_boost <- ifelse(predicted_prob_boost > 0.5, 1, 0)
+confusion_matrix <- table(casetest$label_confirmed_infections, predicted_label_boost)
 total<-length(casetest$label_confirmed_infections) #get the count of all
 accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
 accuracy*100
