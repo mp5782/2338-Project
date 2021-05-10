@@ -17,4 +17,4 @@ The R Script `RDA.R` is our Regression Discontinuity Analysis. The data for that
 
 The python notebook `prep_data_classifiers.ipynb` is used for generating the labels for the machine learning classifiers.
 
-**Results**: The results folder includes the results of the interrupted time series analysis for both the outcomes at the subnational analysis.
+**Results**: The `Results` folder includes the results of the interrupted time series analysis for both the outcomes at the subnational analysis.
