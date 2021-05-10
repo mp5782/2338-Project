@@ -1,23 +1,10 @@
----
-title: "Interrrupted Time series subnational level"
-
----
-
-```{r setup, include=FALSE}
-knitr::purl()
-```
-
-```{r}
+#load libraries
 library(lme4)
 library(lattice)
 library(fastDummies)
 library(tidyverse)
 
-
-
-```
-
-```{r}
+#perform analysis for confirmed infections
 data_1 <- read.csv("./data/aggregate_case_05_04.csv")
 data_1 <- unique(data_1)
 
@@ -103,14 +90,8 @@ lines( d$days, ts$fitted.values, col="red", lwd=2 )
 axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
 dev.off()
 }
-```
 
-
-
-
-
-```{r}
-
+#perform analysis for mobility
 data_1 <- read.csv("./data/aggregate_mobility_05_04.csv")
 data_1 <- unique(data_1)
 data_1 <- dummy_cols(data_1, select_columns = c('phase_indi'))
@@ -180,6 +161,3 @@ lines( d$days, ts_mobility$fitted.values, col="red", lwd=2 )
 axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
 dev.off()
 }
-
-
-```
