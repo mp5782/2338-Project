@@ -1,15 +1,10 @@
 ---
 title: "Interrrupted Time series subnational level"
-author: "Vishwali"
-date: "3/6/2021"
-output:
-  pdf_document: default
-  html_document: default
-  keep_md: yes
+
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::purl()
 ```
 
 ```{r}
