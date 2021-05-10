@@ -15,3 +15,4 @@ The R Script `DGP.R` is our Data Generation Process. Note that we can't host the
 
 The R Script `RDA.R` is our Regression Discontinuity Analysis. The data for that *is* hosted on this repository, so it can be downloaded an run without modification.
 
+*Results* The results folder includes the results of the interrupted time series analysis for both the outcomes at the subnational analysis.
