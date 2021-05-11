@@ -48,8 +48,8 @@ accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
 accuracy*100
 
 #**************************************************
-  
-  
+
+
 # logistic regresssion, infections
 lr.case <- glm(label_confirmed_infections ~ Mobility + rt + days0 + days1 + days2 +
                  days3 + days4 + days5 + days6, family = binomial, data = casetrain)
@@ -97,16 +97,16 @@ accuracy_lda_test*100
 
 
 #svm, mobility
-svm_case <-svm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
-                 days3 + days4 + days5 + days6,data=casetrain)
-summary(svm_case)
-svm_predicted_probs <- predict(svm_case,casetest)
+svm_mob <-svm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
+                 days3 + days4 + days5 + days6,data=mobtrain)
+summary(svm_mob)
+svm_predicted_probs <- predict(svm_mob,mobtest)
 svm_predicted<-svm_predicted_probs>0.5
 svm_predicted<-as.numeric(svm_predicted)
-confusion_matrix <- table(casetest$label_Mobility, svm_predicted, dnn = c("Actual", "Predicted"))
+confusion_matrix <- table(mobtest$label_Mobility, svm_predicted, dnn = c("Actual", "Predicted"))
 confusion_matrix
 
-total<-length(casetest$label_Mobility) #get the count of all
+total<-length(mobtest$label_Mobility) #get the count of all
 accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
 accuracy*100
 
@@ -148,4 +148,3 @@ confusion_matrix <- table(casetest$label_confirmed_infections, predicted_label_b
 total<-length(casetest$label_confirmed_infections) #get the count of all
 accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
 accuracy*100
-
