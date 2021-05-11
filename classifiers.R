@@ -129,20 +129,20 @@ accuracy*100
 #**************************************************
 
 #boosting, mobility
-boost_model <- gbm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
-                     days3 + days4 + days5 + days6,data=casetrain, distribution = "bernoulli", n.trees = 1000)
-predicted_prob_boost <- predict(boost_model, newdata = casetest, n.trees = 1000)
+boost_mob <- gbm(label_Mobility ~ confirmed_infections + rt + days0 + days1 + days2 +
+                     days3 + days4 + days5 + days6,data=mobtrain, distribution = "bernoulli", n.trees = 1000)
+predicted_prob_boost <- predict(boost_mob, newdata = mobtest, n.trees = 1000)
 predicted_label_boost <- ifelse(predicted_prob_boost > 0.5, 1, 0)
-confusion_matrix <- table(casetest$label_Mobility, predicted_label_boost)
-total<-length(casetest$label_Mobility) #get the count of all
+confusion_matrix <- table(mobtest$label_Mobility, predicted_label_boost)
+total<-length(mobtest$label_Mobility) #get the count of all
 accuracy<- (confusion_matrix[1,1]+confusion_matrix[2,2])/total
 accuracy*100
 #**************************************************
 
 #boosting, infections
-boost_model <- gbm(label_confirmed_infections ~ Mobility + rt + days0 + days1 + days2 +
+boost_case <- gbm(label_confirmed_infections ~ Mobility + rt + days0 + days1 + days2 +
                      days3 + days4 + days5 + days6,data=casetrain, distribution = "bernoulli", n.trees = 1000)
-predicted_prob_boost <- predict(boost_model, newdata = casetest, n.trees = 1000)
+predicted_prob_boost <- predict(boost_case, newdata = casetest, n.trees = 1000)
 predicted_label_boost <- ifelse(predicted_prob_boost > 0.5, 1, 0)
 confusion_matrix <- table(casetest$label_confirmed_infections, predicted_label_boost)
 total<-length(casetest$label_confirmed_infections) #get the count of all
