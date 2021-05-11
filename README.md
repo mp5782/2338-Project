@@ -17,4 +17,6 @@ The R Script `interrupted_time_series_analysis.R` is our Regression Discontinuit
 
 The python notebook `prep_data_classifiers.ipynb` is used for generating the labels for the machine learning classifiers.
 
+The R script `classifiers.R` contains the machine learning classifiers we employed, and uses data hosated in this repository.
+
 **Results**: The `Results` folder includes the results of the interrupted time series analysis for both the outcomes at the subnational analysis.
