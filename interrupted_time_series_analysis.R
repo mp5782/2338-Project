@@ -52,7 +52,7 @@ d <- subset(data_1,state%in%c(s))
 #replace nan
 d[is.na(d)] <- 0
 #we save the plots at the following location
-pdf(paste("./Results/confirmed_infections_",s,".pdf"))
+#pdf(paste("./Results/confirmed_infections_",s,".pdf"))
 
 #plot the original data
 plot( d$days, d$confirmed_infections,
@@ -84,11 +84,13 @@ plot( d$days, d$confirmed_infections,
 ts <- lm(confirmed_infections ~ nointer_indi+phase_indi_0 + phase_indi_1 +phase_indi_2+phase_indi_3 +phase_indi_4 + phase_indi_5 +days+
                            + days1 + days2 + days3 +days4 + days5 + days6 , data=d)
 
+ts_plain <- lm(confirmed_infections ~  days , data=d)
 #plot the fitted values
 lines( d$days, ts$fitted.values, col="red", lwd=2 )
+lines(d$days, ts_plain$fitted.values,lwd=2)
 #add date as label on x-axis instead of days
 axis(1, at=d$days,labels=d$date, col.axis="red", las=2,cex.axis = 0.5)
-dev.off()
+#dev.off()
 }
 
 #perform analysis for mobility
